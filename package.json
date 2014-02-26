@@ -1,0 +1,28 @@
+{
+  "name": "fism",
+  "version": "0.0.1",
+  "description": "",
+  "main": "fism.js",
+  "bin": {
+    "phiz": "bin/fism"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qdsang/fism.git"
+  },
+  "keywords": [
+    "fis",
+    "fism"
+  ],
+  "author": "fouber",
+  "license": "MIT",
+  "dependencies": {
+    "fis": ">1.7.0"
+  },
+  "bugs": {
+    "url": "https://github.com/qdsang/fism/issues"
+  }
+}
