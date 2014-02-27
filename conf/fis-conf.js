@@ -1,116 +1,70 @@
 
 fis.config.merge({
+    namespace: '',
     //server settings
     server : {
         clean : {
-            include : /\/(static|template|map|java)\//
+    //        include : /\/(static|template|map|java)\//
         }
-    },
-    roadmap : {
-        //specifications
-        path : [
-            {
-                reg : /^\/(widget|layout|block)\/.*\.js$/i,
-                isMod : true,
-                release : '/static/${namespace}/$&'
-            },
-            {
-                reg : /^\/(.*\.class\.php)$/i,
-                url : '${namespace}/$1',
-                release : '/template/${namespace}/$1',
-                isClass : true,
-                useMap : true
-            },
-            {
-                reg : /^\/(.*\.php)$/i,
-                url : '${namespace}/$1',
-                release : '/template/${namespace}/$1',
-                isMod : true,
-                useMap : true
-            },
-            {
-                reg : '${namespace}-map.json',
-                release : '/map/$&'
-            },
-            {
-                reg : /^\/(static\/)?(.*)$/,
-                release : '/static/${namespace}/$2'
-            }
-        ]
     },
     //plugins
     modules : {
-        preprocessor : {
-            js  : 'phiz-js',
-            php : 'phiz-js'
+        parser : {
+            //.tmpl后缀的文件使用fis-parser-utc插件编译
+        //    tmpl : 'utc',
+            //.coffee后缀的文件使用fis-parser-coffee-script插件编译
+        //    coffee : 'coffee-script',
+            //.less后缀的文件使用fis-parser-less插件编译
+        //    less : 'less'
         },
         postprocessor : {
-            php : 'phiz-wrapper'
+        //    js : 'jswrapper, require-async'
         },
-		postpackager : 'phiz'
+        //postpackager : 'modjs'
     },
     //plugin settings
     settings : {
+        parser : {
+            'coffee-script' : {
+                //不用coffee-script包装作用域
+                bare : true
+            }
+        },
+        postprocessor : {
+            jswrapper : {
+                type : 'amd'
+            }
+        },
+        lint : {
+            //设置jshint插件要排除检查的文件，默认不检查lib、jquery、backbone、underscore等文件
+            //使用spmx release命令时，添加--lint或-l参数即可生效
+            jshint : {
+            //    ignored : [ 'lib/**', /jquery|backbone|underscore/i ]
+            }
+        },
+        spriter : {
+            csssprites : {
+                margin : 20
+            }
+        },
         optimizer : {
             'png-compressor' : {
                 type : 'pngquant'
             }
+        },
+        postpackager : {
+            modjs : {
+                subpath : 'pkg/map.js'
+            }
+        }
+    },
+    roadmap : {
+        ext : {
+            jade : 'html',
+            sass : 'css',
+            scss : 'css',
+            less : 'css',
+            coffee : 'js'
         }
     }
 });
-
-
-
-
-fis.command.register({name: 'dev', callback: function(){
-    fis.command.options = {
-        dest: 'preview',
-        md5: 5,
-        domains: false,
-        lint: false,
-        test: false,
-        optimize: false,
-        pack: true,
-        watch: false,
-        live: false,
-        clean: false,
-        root: '',
-        file: '',
-        unique: ''
-    }
-
-    fis.config.merge({
-        roadmap : {
-            //specifications
-            path : [
-                {
-                    reg : /^\/(widget|layout|block)\/.*\.js$/i,
-                    isMod : true,
-                    release : '/static/${namespace}/$&'
-                },
-                {
-                    reg : /^\/(.*\.class\.php)$/i,
-                    url : '${namespace}/$1',
-                    release : '/template/${namespace}/$1',
-                    isClass : true,
-                    useMap : true
-                },
-                {
-                    reg : /^\/(.*\.php)$/i,
-                    url : '${namespace}/$1',
-                    release : '/template/${namespace}/$1',
-                    isMod : true,
-                    useMap : true
-                },
-                {
-                    reg : '${namespace}-map.json',
-                    release : '/map/$&'
-                },
-                {
-                    reg : /^\/(static\/)?(.*)$/,
-                    release : '/static/${namespace}/$2'
-                }
-            ]
-        }
-    });
-}});
